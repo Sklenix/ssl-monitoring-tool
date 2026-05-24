@@ -1,0 +1,50 @@
+.TH ISA_MONITORING_SSL 1
+.SH POPIS PROGRAMU
+sslsniff \- program, který odposlouchává na zadaném rozhraní, nebo čte ze souboru, následně identifikuje a analyzuje (po ukončení spojení) jednotlivé SSL spojení.
+.SH SPUŠTĚNÍ APLIKACE
+.B sslsniff
+[\fB\-r\fR \f <file>\fR]
+[\fB\-i\fR \f interface\fR]
+.SH OBECNĚ K PŘEKLADU PROGRAMU
+Pro přeložení projektu je nutné mít nainstalovanou knihovnu pcap. Přeložení aplikace je pomocí zadání příkazu make do terminálu. Make má také volbu make clean, která smaže .o soubor. Pro spuštění je potřeba mít administrátorská oprávnění (root).
+.SH PŘÍKLAD K PŘEKLADU
+root@student-vm:/media/sf_sslsniff# make
+.SH MOŽNOSTI
+.TP
+.BR \-i " " interface
+Výběr rozhraní(interface) pro odposlech, pokud rozhraní neexistuje, vypíše se seznam aktivních rozhraní.
+.TP
+.BR \-r " " <file>
+Výběr souboru pro monitoring SSL, při neexistujícím souboru se vypíše chyba.
+.SH PŘÍKLADY SPUŠTĚNÍ
+.TP
+.BR ./sslsniff " "-i " " enp0s3 " " -r " " test.pcapng
+Při takovéto volbě preferuji Monitoring SSL z rozhraní (odposlouchávání).
+.TP
+.BR ./sslsniff " "-r " " test.pcapng " " -i " " enp0s3
+Při takovéto volbě preferuji Monitoring SSL z rozhraní (odposlouchávání).
+.TP
+.BR ./sslsniff " "-r " " test.pcapng
+Monitoring SSL ze souboru jménem test.pcapng, který je uložen v aktuálním adresáři.
+.TP
+.BR ./sslsniff " "-i " " enp0s3
+Monitoring SSL (odposlech) na rozhraní enp0s3.
+.TP
+.BR ./sslsniff " "-i
+Vypíše se seznam aktivních rozhraní.
+.TP
+.BR ./sslsniff " "-r
+Vypíše se chybová hláška "Nezadal jste žádný soubor."
+.TP
+.BR ./sslsniff
+Vypíše se nápověda.
+.SH UPŘESNĚNÍ
+Pokud je nějaká volba  zadána vícekrát, tak program končí s chybou. Aktivní rozhraní zjišťuji tak, že si najdu, asi dané rozhraní má ip adresu a masku, pokud nemá, tak ji beru jako neaktivní.
+Program podporuje detekci tzv. Linux Cooked Headerů, díky této vlastnosti lze odposlouchávat na rozhraní any, rozhraní any slouží k odposlechu na všech rozhraních. Začátek spojení beru od TCP SYN, konec spojení 2x TCP FIN flag, nebo TCP RST flag.
+.SH OMEZENÍ
+Žádných omezení si nejsem vědom, projekt je implementován v celém rozsahu.
+.SH SEZNAM ODEVZDANÝCH SOUBORŮ
+.BR  sslsniff.c,
+.BR  Makefile,
+.BR  sslsniff.1,
+.BR  manual.pdf.
